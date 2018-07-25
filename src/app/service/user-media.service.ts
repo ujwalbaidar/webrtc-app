@@ -18,7 +18,10 @@ export class UserMediaService {
 			if(this.hasUserMedia()){
 				let medianavigator = <any>navigator;
 				medianavigator.getUserMedia = medianavigator.getUserMedia || medianavigator.webkitGetUserMedia || medianavigator.mozGetUserMedia;
-				medianavigator.getUserMedia({ video: true, audio: true }, function (stream) { 
+				medianavigator.getUserMedia({ 
+					video: true, 
+					audio: true 
+				}, (stream) => { 
       				resolve(stream);
 			   	}, err => {
 			   		reject(err);

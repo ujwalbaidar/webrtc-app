@@ -15,16 +15,16 @@ const options = {
 
 const httpsServer = https.createServer(options, app)
 
-// const io = require('socket.io')(httpsServer);
+const io = require('socket.io')(httpsServer);
 
-// io.on('connection', function(socket){
-// 	console.log('a user connected');
+io.on('connection', function(socket){
+	console.log('a user connected');
 
-// 	socket.on('message', function(message) {
-// 	    log('Client said: ', message);
-// 	    socket.broadcast.emit('message', message);
-// 	})
-// });
+	socket.on('message', function(message) {
+	    log('Client said: ', message);
+	    socket.broadcast.emit('message', message);
+	})
+});
 
 httpsServer.listen(config.port, config.host, function(){
 	console.log(`Server Running at: https://${config.host}:${config.port}`);
