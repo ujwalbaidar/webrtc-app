@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import * as io from "socket.io-client/dist/socket.io";
 import { UserMediaService } from './user-media.service';
 
@@ -14,6 +15,9 @@ export class PeerconnectionService {
 			'urls': 'stun:stun.l.google.com:19302'
 		}]
 	};
+	remoteStream: any;
+	streamChange: Subject<string> = new Subject<string>();
+
 	constructor(private userMedia: UserMediaService) { }
 
 	setSocket(socket){
@@ -57,11 +61,13 @@ export class PeerconnectionService {
 					console.log(streamErr);
 				});
 
-			// this.peerConn.ontrack = function(event) {
-			// 	document.getElementById("received_video").srcObject = event.streams[0];
-			// 	document.getElementById("hangup-button").disabled = false;
-			// };
-			
+			this.peerConn.ontrack = (event) => {
+				// document.getElementById("received_video")['srcObject'] = event.streams[0];
+				// document.getElementById("hangup-button")['disabled'] = false;
+				this.remoteStream = event.streams[0];
+				this.streamChange.next(this.remoteStream);
+			};
+
 			this.peerConn.oniceconnectionstatechange = event => {
 		  		console.log('this.peerConn.iceConnectionState')
 		  		console.log(this.peerConn.iceConnectionState)
@@ -141,6 +147,10 @@ export class PeerconnectionService {
 	    } else {
 	        console.warn(err.toString(), err);
 	    }
+	}
+
+	getRemoteStream(){
+		return this.remotestream;
 	}
 
 	signalingMessageCallback(message){

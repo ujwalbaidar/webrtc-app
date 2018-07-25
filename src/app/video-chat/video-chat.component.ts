@@ -18,6 +18,8 @@ export class VideoChatComponent implements OnInit {
 	};
 	socket: any;
 	stream: any;
+	remoteStream: any;
+	_subscription: any;
 
 	constructor(
 		private userMedia: UserMediaService,
@@ -25,6 +27,12 @@ export class VideoChatComponent implements OnInit {
 	) {
 		this.getRoom();
 		this.initSocket();
+		this.remoteStream = peerconnectionService.remoteStream;
+	    this._subscription = peerconnectionService.streamChange.subscribe((value) => { 
+	      	this.remoteStream = value; 
+	      	let remoteVideo = document.getElementById('remoteVideo');
+			remoteVideo['srcObject'] = this.remoteStream;
+	    });
 	}
 
 	ngOnInit() {
@@ -44,8 +52,8 @@ export class VideoChatComponent implements OnInit {
 	}
 
 	gotStream(stream) {
-		let video = document.querySelector('video');
-		video.srcObject = stream;
+		let video = document.getElementById('localVideo');
+		video['srcObject'] = stream;
 	}
 
 	getRoom() {

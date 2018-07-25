@@ -1,8 +1,11 @@
 <p>
   video-chat works!
 </p>
-<div id="videoCanvas">
-	<video id="camera" autoplay playsinline></video>
+<div>
+	<video id="localVideo" autoplay playsinline></video>
+</div>
+<div>
+	<video id="remoteVideo" autoplay playsinline></video>
 </div>
 <div>
 	<button (click)="callFunc()" >Call</button>
